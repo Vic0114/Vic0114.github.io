@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>《像哲学家一样生活》读书笔记</title>
+<style>
+  :root {
+    --primary: #2e6fdb;
+    --primary-dark: #1a4fa0;
+    --bg: #f7f9fc;
+    --card: #ffffff;
+    --text: #1e2330;
+    --text-muted: #6b7280;
+    --border: #e5e9f2;
+    --accent: #f0f5ff;
+    --quote-bg: #eef4ff;
+    --tag-bg: #dbeafe;
+    --tag-color: #1d4ed8;
+    --green: #059669;
+    --red: #dc2626;
+    --yellow: #d97706;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.75;
+    padding-bottom: 60px;
+  }
+
+  /* === 封面 === */
+  .cover {
+    background: linear-gradient(145deg, #1a2e5a 0%, #2e6fdb 100%);
+    color: white;
+    padding: 48px 24px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: "🏛️";
+    position: absolute;
+    font-size: 180px;
+    opacity: 0.06;
+    top: -20px; right: -20px;
+  }
+  .cover .book-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .cover h1 {
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+  .cover .subtitle {
+    font-size: 14px;
+    opacity: 0.75;
+    margin-bottom: 24px;
+  }
+  .cover .meta {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 13px;
+    opacity: 0.85;
+  }
+  .cover .meta span { display: flex; align-items: center; gap: 4px; }
+
+  /* === 一句话摘要 === */
+  .summary-banner {
+    background: #1a2e5a;
+    color: #93c5fd;
+    padding: 16px 24px;
+    font-size: 14px;
+    line-height: 1.7;
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* === 导航目录 === */
+  .nav-section {
+    padding: 20px 16px 8px;
+  }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    padding-left: 4px;
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .toc-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    text-decoration: none;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .toc-item:active { background: var(--accent); transform: scale(0.98); }
+  .toc-item .toc-icon { font-size: 18px; flex-shrink: 0; }
+  .toc-item .toc-text { line-height: 1.4; }
+
+  /* === 内容区 === */
+  .content { padding: 8px 16px; }
+
+  /* === Section 卡片 === */
+  .card {
+    background: var(--card);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-icon { font-size: 22px; }
+  .card-title { font-size: 16px; font-weight: 700; color: var(--primary-dark); }
+  .card-body { padding: 16px 18px; }
+
+  /* === 全书地图 === */
+  .tree-item {
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+  }
+  .tree-item:last-child { border-bottom: none; }
+  .tree-item .part-badge {
+    background: var(--primary);
+    color: white;
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .tree-item .part-badge.part2 { background: #7c3aed; }
+  .tree-item .part-badge.part3 { background: #059669; }
+  .tree-item .part-badge.part4 { background: #d97706; }
+  .tree-item .chapter-list { color: var(--text-muted); font-size: 13px; line-height: 1.6; }
+
+  /* === 论点卡 === */
+  .point-card {
+    background: var(--accent);
+    border-left: 4px solid var(--primary);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+  }
+  .point-card:last-child { margin-bottom: 0; }
+  .point-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .point-num {
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    width: 22px; height: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .point-desc { font-size: 14px; color: var(--text); line-height: 1.7; }
+  .point-tip {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #92400e;
+    line-height: 1.6;
+  }
+  .point-tip::before { content: "💡 "; }
+
+  /* === 技巧卡 === */
+  .technique {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .technique:last-child { margin-bottom: 0; }
+  .technique-head {
+    background: linear-gradient(90deg, var(--accent), white);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .technique-emoji { font-size: 20px; }
+  .technique-name { font-size: 15px; font-weight: 700; color: var(--primary-dark); }
+  .technique-body { padding: 12px 16px; font-size: 14px; line-height: 1.7; }
+  .technique-actions {
+    background: #f0fdf4;
+    border-top: 1px solid #bbf7d0;
+    padding: 10px 16px;
+  }
+  .technique-actions .action-title {
+    font-size: 12px; font-weight: 700;
+    color: var(--green); margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+  .action-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 13px; margin-bottom: 4px; color: #065f46;
+  }
+  .action-item::before { content: "□"; flex-shrink: 0; margin-top: 1px; }
+
+  /* === 哲学家表格 === */
+  .philosopher-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .philosopher-card:last-child { margin-bottom: 0; }
+  .phil-avatar {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), #7c3aed);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .phil-info { flex: 1; }
+  .phil-name { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+  .phil-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+  .phil-desc { font-size: 13px; line-height: 1.6; color: var(--text); }
+
+  /* === 金句 === */
+  .quote-item {
+    background: var(--quote-bg);
+    border-left: 4px solid var(--primary);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+  .quote-item:last-child { margin-bottom: 0; }
+  .quote-text {
+    font-size: 15px;
+    font-style: italic;
+    color: var(--primary-dark);
+    line-height: 1.7;
+    margin-bottom: 6px;
+  }
+  .quote-author {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: right;
+  }
+
+  /* === 批判思考 === */
+  .think-block {
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+  .think-block:last-child { margin-bottom: 0; }
+  .think-block.agree { background: #f0fdf4; border: 1px solid #86efac; }
+  .think-block.doubt { background: #fffbeb; border: 1px solid #fde68a; }
+  .think-block.question { background: #f5f3ff; border: 1px solid #c4b5fd; }
+  .think-title {
+    font-size: 13px; font-weight: 700;
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .think-block.agree .think-title { color: var(--green); }
+  .think-block.doubt .think-title { color: var(--yellow); }
+  .think-block.question .think-title { color: #7c3aed; }
+  .think-item { font-size: 14px; line-height: 1.7; margin-bottom: 6px; padding-left: 16px; position: relative; }
+  .think-item::before { content: "•"; position: absolute; left: 4px; }
+  .think-item:last-child { margin-bottom: 0; }
+
+  /* === 30天计划 === */
+  .week-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .week-card:last-child { margin-bottom: 0; }
+  .week-head {
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .week-card:nth-child(1) .week-head { background: var(--primary); }
+  .week-card:nth-child(2) .week-head { background: #7c3aed; }
+  .week-card:nth-child(3) .week-head { background: var(--green); }
+  .week-card:nth-child(4) .week-head { background: #d97706; }
+  .week-body { padding: 12px 16px; }
+  .task-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 14px; padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.6;
+  }
+  .task-item:last-child { border-bottom: none; }
+  .task-check {
+    width: 20px; height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* === 延伸阅读 === */
+  .book-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .book-item:last-child { border-bottom: none; }
+  .book-cover {
+    width: 42px; height: 56px;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .book-info { flex: 1; }
+  .book-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .book-author { font-size: 12px; color: var(--text-muted); }
+
+  /* === 底部 === */
+  .footer {
+    text-align: center;
+    padding: 24px 16px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* 平滑滚动 */
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+
+<!-- 封面 -->
+<div class="cover">
+  <div class="book-badge">📖 读书笔记</div>
+  <h1>像哲学家一样生活</h1>
+  <div class="subtitle">斯多葛哲学的生活艺术</div>
+  <div class="meta">
+    <span>✍️ 威廉·B·欧文</span>
+    <span>🌿 哲学 · 自我成长</span>
+  </div>
+</div>
+
+<!-- 一句话摘要 -->
+<div class="summary-banner">
+  "通过消极想象与控制二分法，在任何境遇中找到宁静——这就是斯多葛式的幸福之道。"
+</div>
+
+<!-- 目录导航 -->
+<div class="nav-section">
+  <div class="section-label">目录</div>
+  <div class="toc-grid">
+    <a class="toc-item" href="#map">
+      <span class="toc-icon">🗺️</span>
+      <span class="toc-text">全书地图</span>
+    </a>
+    <a class="toc-item" href="#points">
+      <span class="toc-icon">🎯</span>
+      <span class="toc-text">核心论点</span>
+    </a>
+    <a class="toc-item" href="#techniques">
+      <span class="toc-icon">🔧</span>
+      <span class="toc-text">心理技巧</span>
+    </a>
+    <a class="toc-item" href="#philosophers">
+      <span class="toc-icon">🧠</span>
+      <span class="toc-text">三大哲学家</span>
+    </a>
+    <a class="toc-item" href="#quotes">
+      <span class="toc-icon">💬</span>
+      <span class="toc-text">精彩金句</span>
+    </a>
+    <a class="toc-item" href="#thinking">
+      <span class="toc-icon">🤔</span>
+      <span class="toc-text">批判思考</span>
+    </a>
+    <a class="toc-item" href="#plan">
+      <span class="toc-icon">📅</span>
+      <span class="toc-text">30天计划</span>
+    </a>
+    <a class="toc-item" href="#books">
+      <span class="toc-icon">📚</span>
+      <span class="toc-text">延伸阅读</span>
+    </a>
+  </div>
+</div>
+
+<!-- 内容 -->
+<div class="content">
+
+  <!-- 全书地图 -->
+  <div class="card" id="map">
+    <div class="card-header">
+      <span class="card-icon">🗺️</span>
+      <span class="card-title">全书地图</span>
+    </div>
+    <div class="card-body" style="padding: 0;">
+      <div class="tree-item" style="padding: 12px 18px;">
+        <span class="part-badge">引言</span>
+        <span class="chapter-list">为什么需要人生哲学？</span>
+      </div>
+      <div class="tree-item" style="padding: 12px 18px;">
+        <span class="part-badge">第一部分</span>
+        <span class="chapter-list">斯多葛主义的兴起<br>哲学与生活 · 早期斯多葛 · 罗马时代</span>
+      </div>
+      <div class="tree-item" style="padding: 12px 18px;">
+        <span class="part-badge part2">第二部分</span>
+        <span class="chapter-list">心理技巧（核心方法论）<br>消极想象 · 控制二分法 · 宿命论 · 自我否定 · 沉思</span>
+      </div>
+      <div class="tree-item" style="padding: 12px 18px;">
+        <span class="part-badge part3">第三部分</span>
+        <span class="chapter-list">具体处世忠告<br>责任 · 侮辱 · 愤怒 · 名誉 · 死亡等</span>
+      </div>
+      <div class="tree-item" style="padding: 12px 18px; border-bottom: none;">
+        <span class="part-badge part4">第四部分</span>
+        <span class="chapter-list">斯多葛主义在现代<br>衰落 · 重新思考 · 践行</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 核心论点 -->
+  <div class="card" id="points">
+    <div class="card-header">
+      <span class="card-icon">🎯</span>
+      <span class="card-title">核心论点</span>
+    </div>
+    <div class="card-body">
+
+      <div class="point-card">
+        <div class="point-title">
+          <span class="point-num">1</span>
+          你需要一套人生哲学
+        </div>
+        <div class="point-desc">没有人生哲学，生活就会在不知不觉中被浪费。人生哲学由两部分组成：<strong>高远目标</strong>（你最终想要什么）+ <strong>实现战略</strong>（怎么到达那里）。</div>
+        <div class="point-tip">斯多葛主义的高远目标是「宁静」——一种内心的平和，既不被欲望折磨，也不被恐惧困扰。</div>
+      </div>
+
+      <div class="point-card">
+        <div class="point-title">
+          <span class="point-num">2</span>
+          消极想象是幸福的反直觉来源
+        </div>
+        <div class="point-desc">人类有强大的「享乐适应性」——我们很快对好事习以为常。斯多葛对策：<strong>每天想象失去你所拥有的</strong>，反而会让你更珍惜、更感恩。</div>
+        <div class="point-tip">就像每天告诉自己「这可能是我最后一次和父母吃饭」，会让你更用心陪伴。</div>
+      </div>
+
+      <div class="point-card">
+        <div class="point-title">
+          <span class="point-num">3</span>
+          控制二分法：无敌心理学
+        </div>
+        <div class="point-desc">把所有事物分为「我能控制的」和「我不能控制的」，只专注前者。担心控制不了的事，是对精力的最大浪费。</div>
+        <div class="point-tip">遇到比赛，把目标从「赢得比赛」改为「尽力发挥」——无论输赢都不会失去宁静。</div>
+      </div>
+
+      <div class="point-card">
+        <div class="point-title">
+          <span class="point-num">4</span>
+          名誉是一种陷阱
+        </div>
+        <div class="point-desc">追求他人称赞 = 把控制权交给他人 = 自我奴役。爱比克泰德：<strong>如果你将取悦别人设为目标，你就永远无法取悦自己。</strong></div>
+        <div class="point-tip">在社交媒体时代，这条忠告比任何时候都更有现实意义。</div>
+      </div>
+
+      <div class="point-card">
+        <div class="point-title">
+          <span class="point-num">5</span>
+          愤怒是「反快乐」
+        </div>
+        <div class="point-desc">愤怒消耗你的快乐却毫无收益。塞涅卡：<strong>生命太短暂，不应将它浪费在愤怒之中。</strong>当你有能力体验快乐时，为什么非要体验反快乐？</div>
+      </div>
+
+      <div class="point-card">
+        <div class="point-title">
+          <span class="point-num">6</span>
+          思考死亡让你活得更充分
+        </div>
+        <div class="point-desc">塞涅卡：把每一天都当作完整的生命来过，睡前说「我已经活过了」。死亡不是终点，而是让当下变得珍贵的镜子。</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 心理技巧 -->
+  <div class="card" id="techniques">
+    <div class="card-header">
+      <span class="card-icon">🔧</span>
+      <span class="card-title">五大心理技巧</span>
+    </div>
+    <div class="card-body" style="padding: 12px;">
+
+      <div class="technique">
+        <div class="technique-head">
+          <span class="technique-emoji">🌑</span>
+          <span class="technique-name">消极想象</span>
+        </div>
+        <div class="technique-body">定期想象失去你所拥有的：健康、爱人、工作……这不是悲观，而是让你在拥有时就感到感激。偶尔主动体验贫困（只吃面包、睡硬床），磨练对逆境的抵抗力。</div>
+        <div class="technique-actions">
+          <div class="action-title">✦ 今晚就可以做</div>
+          <div class="action-item">睡前5分钟：想象今天某件美好的事「没有发生」</div>
+          <div class="action-item">每月一次「自寻不适」：简餐、早起、关掉手机一天</div>
+        </div>
+      </div>
+
+      <div class="technique">
+        <div class="technique-head">
+          <span class="technique-emoji">⚖️</span>
+          <span class="technique-name">控制二分法</span>
+        </div>
+        <div class="technique-body">遇到任何烦恼，先问：<strong>「这在我的控制范围内吗？」</strong> 在控制内→立刻行动；不在控制内→立刻放手，不再消耗精力。</div>
+        <div class="technique-actions">
+          <div class="action-title">✦ 立即行动</div>
+          <div class="action-item">把「我的目标」从结果改为过程：赢比赛→尽力发挥</div>
+          <div class="action-item">遇到烦恼写下来，标注：「在控制内」or「不在控制内」</div>
+        </div>
+      </div>
+
+      <div class="technique">
+        <div class="technique-head">
+          <span class="technique-emoji">⏳</span>
+          <span class="technique-name">宿命论（对过去放手）</span>
+        </div>
+        <div class="technique-body">对过去采取宿命论态度——它已无法改变，耿耿于怀是浪费。马可·奥勒留：从宇宙的尺度看，我们的烦恼微不足道。</div>
+      </div>
+
+      <div class="technique">
+        <div class="technique-head">
+          <span class="technique-emoji">🧊</span>
+          <span class="technique-name">自我否定</span>
+        </div>
+        <div class="technique-body">偶尔主动放弃享乐，不是为了受苦，而是保持「即使没有它，我也可以活得好」的内心独立。让欲望成为选择，而非驱动你的力量。</div>
+        <div class="technique-actions">
+          <div class="action-title">✦ 这周试试</div>
+          <div class="action-item">明明可以叫外卖，偶尔做简单的饭</div>
+          <div class="action-item">明明可以打车，偶尔步行20分钟</div>
+        </div>
+      </div>
+
+      <div class="technique">
+        <div class="technique-head">
+          <span class="technique-emoji">🪞</span>
+          <span class="technique-name">每日沉思</span>
+        </div>
+        <div class="technique-body">每晚回顾一天：哪些地方做到了斯多葛？哪些地方被情绪带着走？不是为了自责，而是持续校准。塞涅卡每晚都这样做。</div>
+        <div class="technique-actions">
+          <div class="action-title">✦ 睡前3个问题</div>
+          <div class="action-item">今天哪件事让我失去了宁静？为什么？</div>
+          <div class="action-item">我是否把精力花在了无法控制的事情上？</div>
+          <div class="action-item">明天我会如何处理类似的情况？</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 三大哲学家 -->
+  <div class="card" id="philosophers">
+    <div class="card-header">
+      <span class="card-icon">🧠</span>
+      <span class="card-title">三大核心哲学家</span>
+    </div>
+    <div class="card-body">
+
+      <div class="philosopher-card">
+        <div class="phil-avatar">⛓️</div>
+        <div class="phil-info">
+          <div class="phil-name">爱比克泰德</div>
+          <div class="phil-meta">公元50–135年 · 奴隶出身的哲学家</div>
+          <div class="phil-desc">「控制二分法」的核心贡献者。即使作为奴隶，他也证明了：<strong>内心自由与外在处境无关。</strong>他的学生把他的讲课记录成《手册》。</div>
+        </div>
+      </div>
+
+      <div class="philosopher-card">
+        <div class="phil-avatar">📜</div>
+        <div class="phil-info">
+          <div class="phil-name">塞涅卡</div>
+          <div class="phil-meta">公元前4–65年 · 罗马政治家、作家</div>
+          <div class="phil-desc">时间管理与愤怒论的大师。他的书信体哲学写作风格平易近人，是最「现代」的斯多葛主义者。名言：<strong>生命太短暂，不应将它浪费在愤怒之中。</strong></div>
+        </div>
+      </div>
+
+      <div class="philosopher-card">
+        <div class="phil-avatar">👑</div>
+        <div class="phil-info">
+          <div class="phil-name">马可·奥勒留</div>
+          <div class="phil-meta">121–180年 · 罗马皇帝</div>
+          <div class="phil-desc">在权力巅峰仍坚持每日修炼斯多葛主义，写下《沉思录》——这是写给自己的私人日记，不打算公开出版。<strong>他是斯多葛主义的最佳代言人。</strong></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 精彩金句 -->
+  <div class="card" id="quotes">
+    <div class="card-header">
+      <span class="card-icon">💬</span>
+      <span class="card-title">精彩金句</span>
+    </div>
+    <div class="card-body">
+
+      <div class="quote-item">
+        <div class="quote-text">「如果一个哲学家不能医治人类的苦难，'徒劳'就是他的名号。」</div>
+        <div class="quote-author">—— 伊壁鸠鲁</div>
+      </div>
+
+      <div class="quote-item">
+        <div class="quote-text">「我们失去的东西，大多数是我们从未真正拥有过的。」</div>
+        <div class="quote-author">—— 塞涅卡</div>
+      </div>
+
+      <div class="quote-item">
+        <div class="quote-text">「如果你将自己的目标设定为取悦别人，那你就无法自由地取悦自己。你将使自己变成奴隶。」</div>
+        <div class="quote-author">—— 爱比克泰德</div>
+      </div>
+
+      <div class="quote-item">
+        <div class="quote-text">「要求不可能发生的事情是一种疯狂的行为。」</div>
+        <div class="quote-author">—— 马可·奥勒留</div>
+      </div>
+
+      <div class="quote-item">
+        <div class="quote-text">「生命太短暂，不应将它浪费在愤怒之中。」</div>
+        <div class="quote-author">—— 塞涅卡</div>
+      </div>
+
+      <div class="quote-item">
+        <div class="quote-text">「跟着哲学家学习的人每天都要从他那里带回一点好东西：每天回家的路上都应该变得更加健全一点。」</div>
+        <div class="quote-author">—— 塞涅卡</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 批判思考 -->
+  <div class="card" id="thinking">
+    <div class="card-header">
+      <span class="card-icon">🤔</span>
+      <span class="card-title">批判性思考</span>
+    </div>
+    <div class="card-body">
+
+      <div class="think-block agree">
+        <div class="think-title">✅ 认同的观点</div>
+        <div class="think-item">消极想象非常反直觉却极其有效，现代积极心理学（感恩练习）也有大量研究支持</div>
+        <div class="think-item">控制二分法是减少焦虑的最实用框架，尤其适合高压环境</div>
+        <div class="think-item">不追求名誉的观点，在社交媒体时代具有极强现实意义</div>
+      </div>
+
+      <div class="think-block doubt">
+        <div class="think-title">⚠️ 存疑的观点</div>
+        <div class="think-item">完全的宿命论可能导致对社会不公缺乏行动力，「接受现实」有时会变成「合理化不公正」</div>
+        <div class="think-item">过度压制情绪可能有反效果，现代心理学更强调「处理情绪」而非「超越情绪」</div>
+        <div class="think-item">对人际关系的淡漠态度在某些文化背景中难以实践</div>
+      </div>
+
+      <div class="think-block question">
+        <div class="think-title">❓ 未回答的问题</div>
+        <div class="think-item">斯多葛主义如何处理集体性的社会变革？（个人修炼 vs 社会行动）</div>
+        <div class="think-item">在极度不公正的环境中，「接受」是否是最优解？</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 30天计划 -->
+  <div class="card" id="plan">
+    <div class="card-header">
+      <span class="card-icon">📅</span>
+      <span class="card-title">30天斯多葛实践计划</span>
+    </div>
+    <div class="card-body" style="padding: 8px;">
+
+      <div class="week-card">
+        <div class="week-head">📌 第一周：建立意识</div>
+        <div class="week-body">
+          <div class="task-item"><div class="task-check"></div>每晚5分钟消极想象：想象失去今天最珍视的一件事</div>
+          <div class="task-item"><div class="task-check"></div>遇到烦恼时默念：「这在我控制范围内吗？」</div>
+          <div class="task-item"><div class="task-check"></div>每天记录3件「本来可能没有的好事」</div>
+        </div>
+      </div>
+
+      <div class="week-card">
+        <div class="week-head">🔥 第二周：训练内心</div>
+        <div class="week-body">
+          <div class="task-item"><div class="task-check"></div>一次「自寻不适」练习（冷水澡/简餐/步行上班）</div>
+          <div class="task-item"><div class="task-check"></div>遇到批评或侮辱时，先暂停10秒再回应</div>
+          <div class="task-item"><div class="task-check"></div>取消一次本可以享受的娱乐，观察自己的心理反应</div>
+        </div>
+      </div>
+
+      <div class="week-card">
+        <div class="week-head">🌿 第三周：人际关系</div>
+        <div class="week-body">
+          <div class="task-item"><div class="task-check"></div>遇到愤怒时，主动放慢说话速度和步伐</div>
+          <div class="task-item"><div class="task-check"></div>一周内不主动寻求他人对自己的评价</div>
+          <div class="task-item"><div class="task-check"></div>为一次发怒真诚道歉</div>
+        </div>
+      </div>
+
+      <div class="week-card">
+        <div class="week-head">🌟 第四周：整合深化</div>
+        <div class="week-body">
+          <div class="task-item"><div class="task-check"></div>读一章《沉思录》（马可·奥勒留）</div>
+          <div class="task-item"><div class="task-check"></div>写下自己的人生高远目标：我这辈子最重要的事是什么？</div>
+          <div class="task-item"><div class="task-check"></div>回顾30天，记录哪些改变让你感到更平静</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 延伸阅读 -->
+  <div class="card" id="books">
+    <div class="card-header">
+      <span class="card-icon">📚</span>
+      <span class="card-title">延伸阅读推荐</span>
+    </div>
+    <div class="card-body">
+
+      <div class="book-item">
+        <div class="book-cover" style="background:#dbeafe;">📖</div>
+        <div class="book-info">
+          <div class="book-title">《沉思录》</div>
+          <div class="book-author">马可·奥勒留 | 斯多葛主义第一手资料</div>
+        </div>
+      </div>
+
+      <div class="book-item">
+        <div class="book-cover" style="background:#fce7f3;">📜</div>
+        <div class="book-info">
+          <div class="book-title">《论生命的短暂》</div>
+          <div class="book-author">塞涅卡 | 时间管理的古老智慧</div>
+        </div>
+      </div>
+
+      <div class="book-item">
+        <div class="book-cover" style="background:#d1fae5;">📋</div>
+        <div class="book-info">
+          <div class="book-title">《手册》</div>
+          <div class="book-author">爱比克泰德 | 控制二分法的完整论述</div>
+        </div>
+      </div>
+
+      <div class="book-item">
+        <div class="book-cover" style="background:#fef9c3;">🔬</div>
+        <div class="book-info">
+          <div class="book-title">《斯多葛主义》</div>
+          <div class="book-author">约翰·塞拉斯 | 现代学术视角解读</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  读书笔记 · 《像哲学家一样生活》· 2026年3月<br>
+  <span style="opacity:0.6;">Stoicism · 宁静是最高的幸福</span>
+</div>
+
+</body>
+</html>
