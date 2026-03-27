@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>《创新与企业家精神》读书笔记</title>
+<style>
+  :root {
+    --primary: #0284c7;
+    --primary-dark: #013a63;
+    --primary-light: #e7f5ff;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --accent: #dbeafe;
+    --green: #059669;
+    --red: #dc2626;
+    --yellow: #d97706;
+    --purple: #7c3aed;
+    --orange: #ea580c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.75;
+    padding-bottom: 60px;
+  }
+
+  /* === 封面 === */
+  .cover {
+    background: linear-gradient(145deg, #0284c7 0%, #0369a1 50%, #075985 100%);
+    color: white;
+    padding: 52px 20px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: "💡";
+    position: absolute;
+    font-size: 200px;
+    opacity: 0.04;
+    top: -30px; right: -20px;
+  }
+  .cover .book-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 22px;
+    padding: 5px 16px;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+  .cover h1 {
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+  .cover .subtitle {
+    font-size: 14px;
+    opacity: 0.85;
+    margin-bottom: 24px;
+    font-weight: 500;
+  }
+  .cover .meta {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    font-size: 13px;
+    opacity: 0.8;
+    flex-wrap: wrap;
+  }
+  .cover .meta span { display: flex; align-items: center; gap: 5px; }
+
+  /* === 一句话摘要 === */
+  .summary-banner {
+    background: #013a63;
+    color: #bfdbfe;
+    padding: 18px 20px;
+    font-size: 14px;
+    line-height: 1.8;
+    text-align: center;
+    font-style: italic;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  /* === 导航 === */
+  .nav-section {
+    padding: 20px 16px 12px;
+  }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    padding-left: 4px;
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .toc-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    padding: 13px 14px;
+    text-decoration: none;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .toc-item:active { background: var(--accent); transform: scale(0.98); }
+  .toc-item .toc-icon { font-size: 19px; flex-shrink: 0; }
+  .toc-item .toc-text { line-height: 1.35; }
+
+  /* === 内容区 === */
+  .content { padding: 8px 16px; }
+
+  /* === Card === */
+  .card {
+    background: var(--card);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-icon { font-size: 22px; }
+  .card-title { font-size: 16px; font-weight: 700; color: var(--primary-dark); }
+  .card-body { padding: 16px 18px; }
+
+  /* === 核心论点 === */
+  .point-card {
+    background: var(--accent);
+    border-left: 4px solid var(--primary);
+    border-radius: 0 11px 11px 0;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+  }
+  .point-card:last-child { margin-bottom: 0; }
+  .point-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .point-num {
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    width: 24px; height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .point-desc { font-size: 14px; color: var(--text); line-height: 1.7; }
+  .point-tip {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 8px;
+    padding: 11px 13px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #92400e;
+    line-height: 1.6;
+  }
+  .point-tip::before { content: "💡 "; }
+
+  /* === 七大机遇 === */
+  .source-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    background: #fafafa;
+  }
+  .source-card:last-child { margin-bottom: 0; }
+  .source-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .source-icon { font-size: 24px; flex-shrink: 0; }
+  .source-name { font-size: 15px; font-weight: 700; }
+  .source-tag {
+    background: var(--primary);
+    color: white;
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  .source-card.internal .source-tag { background: var(--green); }
+  .source-card.external .source-tag { background: var(--purple); }
+  .source-desc { font-size: 14px; line-height: 1.7; color: var(--text-muted); }
+  .source-examples {
+    background: white;
+    border-radius: 8px;
+    padding: 10px 13px;
+    margin-top: 10px;
+    font-size: 13px;
+  }
+  .source-examples-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+  .source-examples li {
+    font-size: 13px;
+    margin-bottom: 4px;
+    line-height: 1.6;
+    color: var(--text);
+    padding-left: 18px;
+    position: relative;
+  }
+  .source-examples li::before { content: "•"; position: absolute; left: 4px; }
+  .source-examples li:last-child { margin-bottom: 0; }
+
+  /* === 企业家战略 === */
+  .strategy-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .strategy-card:last-child { margin-bottom: 0; }
+  .strategy-head {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(90deg, var(--accent), white);
+  }
+  .strategy-icon { font-size: 22px; }
+  .strategy-name { font-size: 15px; font-weight: 700; color: var(--primary-dark); }
+  .strategy-body { padding: 12px 16px; font-size: 14px; line-height: 1.7; }
+  .strategy-example {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 10px 13px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #065f46;
+  }
+  .strategy-example::before { content: "📌 "; }
+
+  /* === 创新三类型 === */
+  .type-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .type-card {
+    background: var(--primary-light);
+    border: 1px solid #93c5fd;
+    border-radius: 11px;
+    padding: 14px 16px;
+  }
+  .type-icon { font-size: 28px; margin-bottom: 6px; }
+  .type-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: var(--primary-dark); }
+  .type-desc { font-size: 13px; line-height: 1.6; color: var(--text-muted); }
+  .type-ex { background: white; border-radius: 6px; padding: 8px 11px; margin-top: 8px; font-size: 12px; }
+  .type-ex::before { content: "例："; font-weight: 700; color: var(--primary-dark); }
+
+  /* === 金句 === */
+  .quote-item {
+    background: #fef9c3;
+    border-left: 4px solid #eab308;
+    border-radius: 0 10px 10px 0;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+  .quote-item:last-child { margin-bottom: 0; }
+  .quote-text {
+    font-size: 15px;
+    font-style: italic;
+    color: #713f12;
+    line-height: 1.7;
+    margin-bottom: 6px;
+  }
+  .quote-author {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: right;
+    font-weight: 500;
+  }
+
+  /* === 行动清单 === */
+  .action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+  .action-item:last-child { border-bottom: none; }
+  .action-check {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* === 底部 === */
+  .footer {
+    text-align: center;
+    padding: 28px 16px;
+    font-size: 12px;
+    color: var(--text-muted);
+    background: #f1f5f9;
+    border-top: 1px solid var(--border);
+    margin-top: 24px;
+  }
+  .footer-logo {
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+
+<!-- 封面 -->
+<div class="cover">
+  <div class="book-badge">管理经典</div>
+  <h1>创新与企业家精神</h1>
+  <div class="subtitle">Innovation and Entrepreneurship</div>
+  <div class="meta">
+    <span>👤 彼得·德鲁克</span>
+    <span>📅 1985年</span>
+    <span>🏢 现代管理学之父</span>
+  </div>
+</div>
+
+<!-- 一句话摘要 -->
+<div class="summary-banner">
+  "创新不是灵光乍现，而是有组织、有目的、系统化的工作。"
+</div>
+
+<!-- 目录导航 -->
+<div class="nav-section">
+  <div class="section-label">目录</div>
+  <div class="toc-grid">
+    <a class="toc-item" href="#intro">
+      <span class="toc-icon">🎯</span>
+      <span class="toc-text">核心论点</span>
+    </a>
+    <a class="toc-item" href="#types">
+      <span class="toc-icon">📦</span>
+      <span class="toc-text">创新三类型</span>
+    </a>
+    <a class="toc-item" href="#sources">
+      <span class="toc-icon">🔍</span>
+      <span class="toc-text">七大机遇来源</span>
+    </a>
+    <a class="toc-item" href="#strategy">
+      <span class="toc-icon">♟️</span>
+      <span class="toc-text">四大战略</span>
+    </a>
+    <a class="toc-item" href="#management">
+      <span class="toc-icon">🏢</span>
+      <span class="toc-text">企业家管理</span>
+    </a>
+    <a class="toc-item" href="#quotes">
+      <span class="toc-icon">💬</span>
+      <span class="toc-text">精彩金句</span>
+    </a>
+    <a class="toc-item" href="#actions">
+      <span class="toc-icon">✅</span>
+      <span class="toc-text">行动清单</span>
+    </a>
+  </div>
+</div>
+
+<!-- 内容 -->
+<div class="content">
+
+  <!-- 核心论点 -->
+  <div class="card" id="intro">
+    <div class="card-header">
+      <span class="card-icon">🎯</span>
+      <span class="card-title">核心论点</span>
+    </div>
+    <div class="card-body">
+
+      <div class="point-card">
+        <div class="point-title">
+          <span class="point-num">1</span>
+          创新是实践，不是天赋
+        </div>
+        <div class="point-desc">德鲁克将创新定义为：<strong>有组织、有目的、系统化的工作</strong>。创新不是灵光乍现、不是天才的特权，而是一门可以学习、可以训练的学科。</div>
+        <div class="point-tip">创新 = 变革 + 机会。企业家将变革视为开创另一事业或服务的大好机会。</div>
+      </div>
+
+      <div class="point-card">
+        <div class="point-title">
+          <span class="point-num">2</span>
+          创新有三层含义
+        </div>
+        <div class="point-desc"><strong>产品创新</strong>（发明新产品）、<strong>管理创新</strong>（将产品推向市场的技能）、<strong>社会创新</strong>（市场、消费者行为和价值的改变）。爱迪生不只是发明了电灯泡，而是创造了电力产业。</div>
+      </div>
+
+      <div class="point-card">
+        <div class="point-title">
+          <span class="point-num">3</span>
+          创新七大机遇是系统化的
+        </div>
+        <div class="point-desc">德鲁克提出了<strong>七个创新机遇来源</strong>：前四项在企业内部（意外事件、不协调、程序需要、产业结构变化），后三项来自外部（人口统计、认知变化、新知识）。它们就像同一座建筑的七扇窗户。</div>
+      </div>
+
+      <div class="point-card">
+        <div class="point-title">
+          <span class="point-num">4</span>
+          创业需要管理，不只是创意
+        </div>
+        <div class="point-desc">麦当劳没有发明任何新东西，但通过<strong>管理的概念和技术</strong>（标准化、流程设计、分析培训）开创了一个新市场。<strong>企业家精神 = 创新 + 策略 + 管理</strong>，三者缺一不可。</div>
+      </div>
+
+      <div class="point-card">
+        <div class="point-title">
+          <span class="point-num">5</span>
+          创业型管理有四个要件
+        </div>
+        <div class="point-desc">
+          ① 以市场为重心<br>
+          ② 前瞻性的财务计划（尤其现金流）<br>
+          ③ 建立最高管理团队<br>
+          ④ 创业家明确自己的角色和范围
+        </div>
+        <div class="point-tip">爱迪生就是败在后两项：拒绝建立团队，坚持个人英雄式管理。</div>
+      </div>
+
+      <div class="point-card">
+        <div class="point-title">
+          <span class="point-num">6</span>
+          创新是社会变革的有效工具
+        </div>
+        <div class="point-desc">创新不会像革命那样"斩草除根"或引起流血事件，而是以<strong>循序渐进</strong>的方式推进社会健康发展。<strong>杰斐逊希望通过革命实现的目标，其实都可以通过创新与企业家精神实现。</strong></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 创新三类型 -->
+  <div class="card" id="types">
+    <div class="card-header">
+      <span class="card-icon">📦</span>
+      <span class="card-title">创新的三大类型</span>
+    </div>
+    <div class="card-body" style="padding: 12px;">
+
+      <div class="type-row">
+        <div class="type-card">
+          <div class="type-icon">🔬</div>
+          <div class="type-name">产品创新</div>
+          <div class="type-desc">发明新的产品或服务</div>
+          <div class="type-ex">电灯泡、收割机</div>
+        </div>
+      </div>
+
+      <div class="type-row">
+        <div class="type-card">
+          <div class="type-icon">⚙️</div>
+          <div class="type-name">管理创新</div>
+          <div class="type-desc">将产品推向市场的技能与活动</div>
+          <div class="type-ex">爱迪生的电力系统、麦当劳的标准化</div>
+        </div>
+      </div>
+
+      <div class="type-row">
+        <div class="type-card">
+          <div class="type-icon">🌐</div>
+          <div class="type-name">社会创新</div>
+          <div class="type-desc">市场、消费者行为和价值的创新</div>
+          <div class="type-ex">麦考密克的分期付款制度</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 七大机遇来源 -->
+  <div class="card" id="sources">
+    <div class="card-header">
+      <span class="card-icon">🔍</span>
+      <span class="card-title">创新机遇七大来源</span>
+    </div>
+    <div class="card-body" style="padding: 12px;">
+
+      <div class="source-card internal">
+        <div class="source-head">
+          <span class="source-icon">1️⃣</span>
+          <span class="source-name">意外事件</span>
+          <span class="source-tag">内部</span>
+        </div>
+        <div class="source-desc">意外的成功、意外的失败、意外的外部事件。许多机会就藏在意外之中。</div>
+        <div class="source-examples">
+          <div class="source-examples-title">典型案例</div>
+          <li>麦当劳：克罗克注意到一家小汉堡店的意外成功</li>
+        </div>
+      </div>
+
+      <div class="source-card internal">
+        <div class="source-head">
+          <span class="source-icon">2️⃣</span>
+          <span class="source-name">不协调事件</span>
+          <span class="source-tag">内部</span>
+        </div>
+        <div class="source-desc">实际状况与预期状况之间不一致；认知与实际的客户价值不协调；程序的逻辑内部不协调。</div>
+        <div class="source-examples">
+          <div class="source-examples-title">典型表现</div>
+          <li>客户说想要X，实际购买的是Y</li>
+          <li>行业假设与市场现实不符</li>
+        </div>
+      </div>
+
+      <div class="source-card internal">
+        <div class="source-head">
+          <span class="source-icon">3️⃣</span>
+          <span class="source-name">程序需要</span>
+          <span class="source-tag">内部</span>
+        </div>
+        <div class="source-desc">工作中"总有个地方不对劲"的问题，等待被解决。</div>
+      </div>
+
+      <div class="source-card internal">
+        <div class="source-head">
+          <span class="source-icon">4️⃣</span>
+          <span class="source-name">产业和市场结构</span>
+          <span class="source-tag">内部</span>
+        </div>
+        <div class="source-desc">产业结构发生变化时，旧企业的惯性可能成为新企业的机会。</div>
+        <div class="source-examples">
+          <div class="source-examples-title">典型案例</div>
+          <li>汽车取代马车：整个产业重构</li>
+        </div>
+      </div>
+
+      <div class="source-card external">
+        <div class="source-head">
+          <span class="source-icon">5️⃣</span>
+          <span class="source-name">人口统计数据</span>
+          <span class="source-tag">外部</span>
+        </div>
+        <div class="source-desc">人口年龄结构、教育水平、收入水平的变化——这是最可靠的创新机遇。</div>
+      </div>
+
+      <div class="source-card external">
+        <div class="source-head">
+          <span class="source-icon">6️⃣</span>
+          <span class="source-name">认知变化</span>
+          <span class="source-tag">外部</span>
+        </div>
+        <div class="source-desc">人们对世界的认知、情绪、意义的改变。认知变化的时机把握至关重要。</div>
+        <div class="source-examples">
+          <div class="source-examples-title">典型案例</div>
+          <li>健康意识崛起 → 健康食品兴起</li>
+        </div>
+      </div>
+
+      <div class="source-card external">
+        <div class="source-head">
+          <span class="source-icon">7️⃣</span>
+          <span class="source-name">新知识</span>
+          <span class="source-tag">外部</span>
+        </div>
+        <div class="source-desc">基于科学或非科学新知识的创新。特点是：周期长、风险高、成功几率小，但一旦成功影响力巨大。</div>
+        <div class="source-examples">
+          <div class="source-examples-title">典型案例</div>
+          <li>法国"协和"式飞机：高科技但无商业用途的失败案例</li>
+          <li>日本的"创造性模仿"：在他人原创上改进，用市场创新打败原创者</li>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 企业家战略 -->
+  <div class="card" id="strategy">
+    <div class="card-header">
+      <span class="card-icon">♟️</span>
+      <span class="card-title">四大企业家战略</span>
+    </div>
+    <div class="card-body" style="padding: 12px;">
+
+      <div class="strategy-card">
+        <div class="strategy-head">
+          <span class="strategy-icon">🎲</span>
+          <span class="strategy-name">孤注一掷</span>
+        </div>
+        <div class="strategy-body">大规模、全力投入的战略。适合开创一个全新的市场或产业，但风险极高。</div>
+        <div class="strategy-example">风险：一旦失败，损失惨重</div>
+      </div>
+
+      <div class="strategy-card">
+        <div class="strategy-head">
+          <span class="strategy-icon">🎯</span>
+          <span class="strategy-name">攻其软肋</span>
+        </div>
+        <div class="strategy-body">找到竞争对手的弱点，精准打击。不需要成为最强，只需要比对手在某一点上更好。</div>
+        <div class="strategy-example">日本的汽车业：在质量和可靠性上超越美国车</div>
+      </div>
+
+      <div class="strategy-card">
+        <div class="strategy-head">
+          <span class="strategy-icon">🏝️</span>
+          <span class="strategy-name">生态利基</span>
+        </div>
+        <div class="strategy-body">在一个细分市场中做到独一无二，让竞争对手无法或不愿意进入。</div>
+        <div class="strategy-example">专业医疗设备、小众奢侈品牌</div>
+      </div>
+
+      <div class="strategy-card">
+        <div class="strategy-head">
+          <span class="strategy-icon">🔄</span>
+          <span class="strategy-name">改变价值和特征</span>
+        </div>
+        <div class="strategy-body">改变客户对产品或服务的价值认知，开创一个新市场。</div>
+        <div class="strategy-example">分期付款：让没有购买力的农夫能买收割机</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 企业家管理 -->
+  <div class="card" id="management">
+    <div class="card-header">
+      <span class="card-icon">🏢</span>
+      <span class="card-title">创业型管理政策</span>
+    </div>
+    <div class="card-body">
+
+      <div class="point-card">
+        <div class="point-title">📋 接受创新</div>
+        <div class="point-desc">企业必须接受创新，并视改变为机会，而非威胁。创新应该成为"日常行为和实践"，而非特别项目。</div>
+      </div>
+
+      <div class="point-card">
+        <div class="point-title">📊 系统衡量</div>
+        <div class="point-desc">建立有系统的衡量尺度，同时培养学习能力，持续改善现有成就。</div>
+      </div>
+
+      <div class="point-card">
+        <div class="point-title">🏗️ 结构与激励</div>
+        <div class="point-desc">明确企业结构、任用与管理、津贴、激励及奖励等实施办法。</div>
+      </div>
+
+      <div class="point-card">
+        <div class="point-title">⚠️ 禁忌</div>
+        <div class="point-desc">创业型管理中存在若干不该做的事。例如：不要把创新局限在研发部门；不要过早"优化"。</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 精彩金句 -->
+  <div class="card" id="quotes">
+    <div class="card-header">
+      <span class="card-icon">💬</span>
+      <span class="card-title">精彩金句</span>
+    </div>
+    <div class="card-body">
+
+      <div class="quote-item">
+        <div class="quote-text">「创新是企业家特有的工具，他们凭借创新，将变革当做是开创另一事业或服务的大好机会。」</div>
+        <div class="quote-author">—— 彼得·德鲁克</div>
+      </div>
+
+      <div class="quote-item">
+        <div class="quote-text">「创新是有目的性的，是一门学科。」</div>
+        <div class="quote-author">—— 彼得·德鲁克</div>
+      </div>
+
+      <div class="quote-item">
+        <div class="quote-text">「创新将变革视为机会，而非威胁。」</div>
+        <div class="quote-author">—— 彼得·德鲁克</div>
+      </div>
+
+      <div class="quote-item">
+        <div class="quote-text">「创新与企业家精神是以循序渐进的方式，每次推出一个新产品，下次实施一项新政策。它们并没有事先规划，而是专注于每个机会和各种需求。」</div>
+        <div class="quote-author">—— 彼得·德鲁克</div>
+      </div>
+
+      <div class="quote-item">
+        <div class="quote-text">「麦考密克是第一位清楚地将"营销"看做是企业特有核心功能的人，他认为管理的特殊任务在于"创造顾客"。」</div>
+        <div class="quote-author">—— 詹文明（推荐序）</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 行动清单 -->
+  <div class="card" id="actions">
+    <div class="card-header">
+      <span class="card-icon">✅</span>
+      <span class="card-title">实践行动清单</span>
+    </div>
+    <div class="card-body">
+
+      <div class="action-item">
+        <div class="action-check"></div>
+        本周花时间梳理你的业务/工作中出现的「意外成功」和「意外失败」
+      </div>
+
+      <div class="action-item">
+        <div class="action-check"></div>
+        识别一个「不协调」：客户说想要什么 vs 实际做什么？差距在哪里？
+      </div>
+
+      <div class="action-item">
+        <div class="action-check"></div>
+        思考人口变化趋势：你的目标客户的年龄、教育、收入在发生什么变化？
+      </div>
+
+      <div class="action-item">
+        <div class="action-check"></div>
+        审查你的创新是哪个类型：产品？管理？社会？
+      </div>
+
+      <div class="action-item">
+        <div class="action-check"></div>
+        检查你的组织是否把"创新"视为日常实践，还是特别项目？
+      </div>
+
+      <div class="action-item">
+        <div class="action-check"></div>
+        选择一个创新机遇来源（七个之一），深入学习并应用
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-logo">💡</div>
+  读书笔记 · 《创新与企业家精神》· 2026年3月<br>
+  <span style="opacity:0.7;">创新是实践，不是天赋</span>
+</div>
+
+</body>
+</html>
