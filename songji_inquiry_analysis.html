@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>松记纽扣 · 询盘客户画像分析报告</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f5f5; color: #333; line-height: 1.6; }
+  .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: white; padding: 40px 20px; text-align: center; }
+  .header h1 { font-size: 28px; margin-bottom: 8px; }
+  .header p { opacity: 0.7; font-size: 14px; }
+  .container { max-width: 960px; margin: 0 auto; padding: 20px; }
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .kpi-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; }
+  .kpi-card .num { font-size: 32px; font-weight: 700; color: #0f3460; }
+  .kpi-card .label { font-size: 13px; color: #888; margin-top: 4px; }
+  .section { background: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .section h2 { font-size: 18px; margin-bottom: 16px; color: #0f3460; border-left: 4px solid #0f3460; padding-left: 12px; }
+  .section h3 { font-size: 15px; color: #0f3460; margin: 16px 0 8px; }
+  .chart-wrap { position: relative; width: 100%; max-height: 360px; margin: 12px 0; }
+  .chart-wrap canvas { width: 100% !important; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #eee; }
+  th { background: #f8f9fa; font-weight: 600; color: #555; font-size: 12px; text-transform: uppercase; }
+  tr:hover { background: #f8f9ff; }
+  .bar-inline { display: inline-block; height: 14px; border-radius: 3px; background: linear-gradient(90deg, #0f3460, #3498db); margin-right: 6px; vertical-align: middle; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; margin: 2px; }
+  .tag-blue { background: #e3f2fd; color: #1565c0; }
+  .tag-green { background: #e8f5e9; color: #2e7d32; }
+  .tag-orange { background: #fff3e0; color: #e65100; }
+  .tag-red { background: #ffebee; color: #c62828; }
+  .tag-purple { background: #f3e5f5; color: #6a1b9a; }
+  .highlight-box { background: #f0f4ff; border-radius: 8px; padding: 16px; margin: 12px 0; }
+  .insight { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .insight strong { color: #d97706; }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } .kpi-row { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>松记纽扣 · 询盘客户画像分析</h1>
+  <p>数据来源：松记纽扣-询盘表260616.xlsx ｜ 数据周期：2025/05/22 – 2026/06/28 ｜ 有效询盘：135条</p>
+</div>
+
+<div class="container">
+
+<!-- KPI Cards -->
+<div class="kpi-row">
+  <div class="kpi-card"><div class="num">135</div><div class="label">有效询盘总量</div></div>
+  <div class="kpi-card"><div class="num">30.5%</div><div class="label">海外客户占比</div></div>
+  <div class="kpi-card"><div class="num">4</div><div class="label">已成交订单</div></div>
+  <div class="kpi-card"><div class="num">17</div><div class="label">覆盖行业类型</div></div>
+  <div class="kpi-card"><div class="num">36条/月</div><div class="label">近期月均询盘（2026.6）</div></div>
+</div>
+
+<!-- 一、行业分布 -->
+<div class="section">
+  <h2>一、客户行业分布（智能推断）</h2>
+  <div class="grid-2">
+    <div class="chart-wrap"><canvas id="chartIndustry"></canvas></div>
+    <div>
+      <table>
+        <tr><th>行业</th><th>数量</th><th>占比</th><th>分布</th></tr>
+        <tr><td><strong>服装/纺织</strong></td><td>29</td><td>21.5%</td><td><span class="bar-inline" style="width:173px"></span></td></tr>
+        <tr><td><strong>贸易商/外贸</strong></td><td>12</td><td>8.9%</td><td><span class="bar-inline" style="width:71px"></span></td></tr>
+        <tr><td>未标注</td><td>6</td><td>4.4%</td><td><span class="bar-inline" style="width:35px"></span></td></tr>
+        <tr><td>箱包</td><td>5</td><td>3.7%</td><td><span class="bar-inline" style="width:30px"></span></td></tr>
+        <tr><td>汽车/交通</td><td>5</td><td>3.7%</td><td><span class="bar-inline" style="width:30px"></span></td></tr>
+        <tr><td>橡塑制品</td><td>4</td><td>3.0%</td><td><span class="bar-inline" style="width:24px"></span></td></tr>
+        <tr><td>医疗</td><td>3</td><td>2.2%</td><td><span class="bar-inline" style="width:18px"></span></td></tr>
+        <tr><td>家居/家纺</td><td>2</td><td>1.5%</td><td><span class="bar-inline" style="width:12px"></span></td></tr>
+        <tr><td>其他（玩具/宠物/包装/电子等）</td><td>15</td><td>11.1%</td><td><span class="bar-inline" style="width:89px"></span></td></tr>
+        <tr><td>其他/待归类</td><td>28</td><td>20.7%</td><td><span class="bar-inline" style="width:166px"></span></td></tr>
+      </table>
+      <div class="insight" style="margin-top:12px">
+        <strong>关键发现：</strong>服装/纺织行业以 21.5% 的占比成为第一核心客群，但 20.7% 的询盘行业不明确。建议在表格"行业"列加强填写规范，有助于后续精准分析。
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 二、产品需求 -->
+<div class="section">
+  <h2>二、产品需求类型分布</h2>
+  <div class="grid-2">
+    <div class="chart-wrap"><canvas id="chartProduct"></canvas></div>
+    <div>
+      <table>
+        <tr><th>产品类型</th><th>数量</th><th>占比</th></tr>
+        <tr><td><strong>四合扣/啪钮</strong></td><td>23</td><td>17.0%</td></tr>
+        <tr><td><strong>LOGO定制</strong></td><td>13</td><td>9.6%</td></tr>
+        <tr><td><strong>金属钮扣（通用）</strong></td><td>10</td><td>7.4%</td></tr>
+        <tr><td>五金配件</td><td>9</td><td>6.7%</td></tr>
+        <tr><td>工字扣/撞钉</td><td>8</td><td>5.9%</td></tr>
+        <tr><td>树脂/果实/尿素扣</td><td>4</td><td>3.0%</td></tr>
+        <tr><td>五爪扣/急钮</td><td>4</td><td>3.0%</td></tr>
+        <tr><td>西装/礼服扣</td><td>3</td><td>2.2%</td></tr>
+        <tr><td>饰品扣/装饰扣</td><td>3</td><td>2.2%</td></tr>
+        <tr><td>磁吸扣</td><td>2</td><td>1.5%</td></tr>
+        <tr><td>塑胶扣</td><td>2</td><td>1.5%</td></tr>
+        <tr><td>其他</td><td>54</td><td>40.0%</td></tr>
+      </table>
+      <div class="insight" style="margin-top:12px">
+        <strong>关键发现：</strong>四合扣/啪钮是绝对第一品类（17%），其次是 LOGO 定制需求（9.6%）。定制需求意味着高附加值订单。五金配件（登山扣/锁扣/D扣）也有可观需求（6.7%）。
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 三、行业×产品交叉 -->
+<div class="section">
+  <h2>三、行业 × 产品需求交叉分析</h2>
+  <div class="chart-wrap"><canvas id="chartCross"></canvas></div>
+  <div class="insight">
+    <strong>核心交叉洞察：</strong><br>
+    · <strong>服装/纺织客户</strong> → 主需工字扣/撞钉（6条）、LOGO定制（5条）、四合扣/啪钮（4条）、西装/礼服扣（3条）<br>
+    · <strong>箱包客户</strong> → 100% 需求四合扣/啪钮（5条全部），是最精准的品类匹配<br>
+    · <strong>贸易商</strong> → 需求分散，四合扣和通用金属扣为主，可能不专注单一品类<br>
+    · <strong>汽车行业</strong> → 需求与主流不重叠，多为卡扣/紧固件等非核心品类
+  </div>
+</div>
+
+<!-- 四、转化漏斗 -->
+<div class="section">
+  <h2>四、转化漏斗分析</h2>
+  <div class="chart-wrap"><canvas id="chartFunnel"></canvas></div>
+  <div style="margin-top:16px">
+    <h3>成交明细</h3>
+    <table>
+      <tr><th>日期</th><th>客户</th><th>行业</th><th>产品</th><th>金额</th><th>来源</th></tr>
+      <tr>
+        <td>2026/5/12</td><td>米拓半导体（上海）</td><td><span class="tag tag-blue">工业/电子</span></td>
+        <td>8MM/10MM纽扣定制开模打样</td>
+        <td>¥32,791</td><td>官网</td>
+      </tr>
+      <tr>
+        <td>2026/5/20</td><td>青岛本依凡</td><td><span class="tag tag-green">女装品牌</span></td>
+        <td>工字扣打模</td>
+        <td>¥80</td><td>-</td>
+      </tr>
+      <tr>
+        <td>2026/5/22</td><td>苏州安泰进出口</td><td><span class="tag tag-purple">贸易商</span></td>
+        <td>222#四合扣+五爪拿样</td>
+        <td>¥33</td><td>电话</td>
+      </tr>
+      <tr>
+        <td>2025/6/7</td><td>上海盐浴紧固件</td><td><span class="tag tag-orange">五金/工业</span></td>
+        <td>12MM铜啪钮</td>
+        <td>1,230套</td><td>百度</td>
+      </tr>
+    </table>
+    <div class="highlight-box" style="margin-top:12px">
+      <h3>转化漏斗诊断</h3>
+      <p>· <strong>成交率 8.0%</strong>（4/50有结果记录），属于 B2B 工厂正常偏低水平</p>
+      <p>· <strong>最大流失环节：能力不匹配（18%）</strong>——询盘产品超出松记产能范围（汽车卡扣、糖果批发、真珍珠等），说明渠道来的流量不够精准</p>
+      <p>· <strong>第二大流失：加微信后沉默（12%）</strong>——跟进流程可能需要标准化话术和定时提醒</p>
+      <p>· <strong>跟进中 36%</strong>——仍有较多在途客户，是近期转化重点</p>
+    </div>
+  </div>
+</div>
+
+<!-- 五、渠道 -->
+<div class="section">
+  <h2>五、询盘来源渠道分析</h2>
+  <div class="grid-2">
+    <div class="chart-wrap"><canvas id="chartSource"></canvas></div>
+    <div>
+      <table>
+        <tr><th>渠道</th><th>数量</th><th>占比</th></tr>
+        <tr><td><strong>百度推广</strong></td><td>55</td><td>40.7%</td></tr>
+        <tr><td>电话</td><td>16</td><td>11.9%</td></tr>
+        <tr><td>视频号</td><td>11</td><td>8.1%</td></tr>
+        <tr><td>TikTok投流</td><td>10+11</td><td>15.5%</td></tr>
+        <tr><td>百度自然搜索</td><td>9</td><td>6.7%</td></tr>
+        <tr><td>邮件/WhatsApp</td><td>13</td><td>9.6%</td></tr>
+        <tr><td>必应/谷歌/搜狗</td><td>7</td><td>5.2%</td></tr>
+        <tr><td>官网</td><td>5</td><td>3.7%</td></tr>
+      </table>
+      <div class="insight" style="margin-top:12px">
+        <strong>渠道效率简评：</strong><br>
+        · 百度推广是绝对主力（40.7%），但流量较杂，无效询盘多<br>
+        · TikTok+视频号合计 23.6%，增长快，海外客户占比高<br>
+        · 官网来源仅 3.7% 但成交一单 ¥32,791——高质量渠道
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 六、地域 -->
+<div class="section">
+  <h2>六、客户地域分布</h2>
+  <div class="chart-wrap"><canvas id="chartRegion"></canvas></div>
+  <div class="highlight-box" style="margin-top:12px">
+    <h3>地域洞察</h3>
+    <p>· <strong>国内核心：广东（31.1%）+ 浙江（14.1%）+ 江苏（11.1%）</strong> = 三大服装产业带，占国内 72%</p>
+    <p>· <strong>海外核心：南亚（孟加拉14条+巴基斯坦13条）</strong> = 27条，占比达海外总量的 58.7%，是服装代工转移的核心目的地</p>
+    <p>· 南非3条、印度2条、马来西亚2条，分散在多个国家，说明 TikTok 全球投流效果正在显现</p>
+  </div>
+</div>
+
+<!-- 七、时间趋势 -->
+<div class="section">
+  <h2>七、询盘增长趋势</h2>
+  <div class="chart-wrap"><canvas id="chartTime"></canvas></div>
+  <div class="insight">
+    <strong>趋势判断：</strong>从 2025/8 开始进入稳定增长通道，2026/4 起加速放量（23条→17条→36条）。2026年6月单月36条，是去年同期的12倍，说明多渠道投流策略正在生效，但需同步加强精准度和转化能力。
+  </div>
+</div>
+
+<!-- 八、客户画像总结 -->
+<div class="section">
+  <h2>八、目标客户画像总结</h2>
+  <div class="highlight-box">
+    <table>
+      <tr><th style="width:120px">维度</th><th>核心特征</th></tr>
+      <tr><td><strong>典型客户类型</strong></td><td>服装厂/品牌（7.4%）+ 贸易商/中间商（7.4%）合计15%，另有大量未明确身份的个人询盘（50%）</td></tr>
+      <tr><td><strong>核心行业</strong></td><td>服装/纺织（21.5%），贸易商（8.9%），箱包（3.7%），汽车（3.7%）</td></tr>
+      <tr><td><strong>高频需求产品</strong></td><td>四合扣/啪钮（17%）、LOGO定制（9.6%）、金属钮扣通用（7.4%）、工字扣/撞钉（5.9%）</td></tr>
+      <tr><td><strong>国内客户来源</strong></td><td>广东（31%）、浙江（14%）、江苏（11%）、上海（8%）— 服装产业带集中</td></tr>
+      <tr><td><strong>海外客户来源</strong></td><td>南亚为主（孟加拉+巴基斯坦=58%海外）、南非、印度、中东 — 全球服装制造转移目的地</td></tr>
+      <tr><td><strong>主要获客渠道</strong></td><td>百度推广（41%）+ TikTok（16%）+ 视频号（8%）+ 电话（12%）</td></tr>
+      <tr><td><strong>转化难点</strong></td><td>① 流量不精准（18%需求不匹配）② 加微后沉默（12%）③ 价格敏感（0.28 vs 0.532的博弈）</td></tr>
+      <tr><td><strong>高价值信号</strong></td><td>定制LOGO需求（高客单价）、官网来源（最精准）、箱包行业四合扣需求（100%匹配）</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- 九、建议 -->
+<div class="section">
+  <h2>九、运营改善建议</h2>
+  <div class="insight">
+    <strong>🎯 短期可执行：</strong><br>
+    1. <strong>表格规范：</strong>"行业"列填写率仅26.7%（36/135），建议设为必填下拉选项，分类后用数据指导投放<br>
+    2. <strong>渠道优化：</strong>百度推广关键词加否定词，过滤"汽车卡扣""糖果批发"等不相关流量<br>
+    3. <strong>跟进SOP：</strong>加微后 24h/3天/7天 三阶段自动提醒话术，降低沉默率（当前12%）<br>
+    4. <strong>官网强化：</strong>官网流量仅3.7%但成交了最高客单价（¥32,791），建议SEO投入和官网优化
+  </div>
+  <div class="insight" style="border-left-color: #10b981; background: #ecfdf5;">
+    <strong>📈 中长期战略：</strong><br>
+    1. <strong>南亚特攻：</strong>孟加拉+巴基斯坦=58%海外客户，建议针对这两个市场做专项产品推荐（工字扣/撞钉是牛仔裤生产刚需）<br>
+    2. <strong>视频号+TikTok双引擎：</strong>合计23.6%且增长快，继续扩大投流，尤其 TikTok 表单和私信模式<br>
+    3. <strong>品类聚焦：</strong>四合扣/啪钮是最大需求品类（17%），且与箱包行业100%匹配，可作为对外展示的核心品类<br>
+    4. <strong>建立客户分级：</strong>将客户分为A类（服装品牌/有LOGO定制需求）、B类（贸易商）、C类（个人散单），差异化跟进策略
+  </div>
+</div>
+
+</div>
+
+<script>
+// Colors
+const colors = ['#0f3460','#1a5276','#2e86c1','#3498db','#5dade2','#85c1e9','#aed6f1','#d4e6f1','#ebf5fb'];
+const colors2 = ['#0f3460','#2e86c1','#e74c3c','#f39c12','#27ae60','#8e44ad','#16a085','#d35400','#2980b9','#c0392b','#7f8c8d','#2c3e50'];
+
+// 1. Industry pie
+new Chart(document.getElementById('chartIndustry'), {
+  type: 'doughnut',
+  data: {
+    labels: ['服装/纺织','贸易商/外贸','箱包','汽车/交通','橡塑制品','医疗','家居/家纺','其他','未标注','待归类'],
+    datasets: [{
+      data: [29,12,5,5,4,3,2,15,6,28],
+      backgroundColor: colors2,
+      borderWidth: 0
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: { position: 'right', labels: { font: { size: 11 }, padding: 8 } },
+      title: { display: true, text: '客户行业分布（135条有效询盘）', font: { size: 13 } }
+    }
+  }
+});
+
+// 2. Product bar
+new Chart(document.getElementById('chartProduct'), {
+  type: 'bar',
+  data: {
+    labels: ['四合扣/啪钮','LOGO定制','金属钮扣','五金配件','工字扣/撞钉','树脂/果实/尿素扣','五爪扣/急钮','西装/礼服扣','饰品扣/装饰扣','磁吸扣','塑胶扣'],
+    datasets: [{
+      label: '询盘数量',
+      data: [23,13,10,9,8,4,4,3,3,2,2],
+      backgroundColor: colors2,
+      borderRadius: 6
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: { display: false },
+      title: { display: true, text: '产品需求 TOP11（注意40%未明确品类）', font: { size: 13 } }
+    },
+    scales: { x: { title: { display: true, text: '条数' } } }
+  }
+});
+
+// 3. Cross table chart - simplified
+new Chart(document.getElementById('chartCross'), {
+  type: 'bar',
+  data: {
+    labels: ['服装/纺织\n(29条)','箱包\n(5条)','贸易商\n(12条)','汽车/交通\n(5条)','医疗\n(3条)','橡塑制品\n(4条)'],
+    datasets: [
+      { label: '四合扣/啪钮', data: [4,5,2,1,1,1], backgroundColor: '#0f3460' },
+      { label: '工字扣/撞钉', data: [6,0,0,0,0,0], backgroundColor: '#2e86c1' },
+      { label: 'LOGO定制', data: [5,0,0,1,0,0], backgroundColor: '#e74c3c' },
+      { label: '西装/礼服扣', data: [3,0,0,0,0,0], backgroundColor: '#27ae60' },
+      { label: '五金配件', data: [2,0,0,1,0,1], backgroundColor: '#8e44ad' },
+      { label: '塑胶扣', data: [0,0,0,0,0,2], backgroundColor: '#d35400' },
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      title: { display: true, text: '行业 × 产品需求交叉分布', font: { size: 13 } }
+    },
+    scales: {
+      x: { stacked: true, title: { display: true, text: '行业' } },
+      y: { stacked: true, title: { display: true, text: '询盘条数' } }
+    }
+  }
+});
+
+// 4. Funnel
+new Chart(document.getElementById('chartFunnel'), {
+  type: 'bar',
+  data: {
+    labels: ['询盘总量','跟进中','已报价待回复','加微信后沉默','无效询盘','能力不匹配','成交'],
+    datasets: [{
+      label: '数量',
+      data: [50, 18, 5, 6, 6, 9, 4],
+      backgroundColor: ['#2e86c1','#3498db','#f39c12','#e67e22','#95a5a6','#e74c3c','#27ae60'],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: { display: false },
+      title: { display: true, text: '有结果记录50条的转化漏斗', font: { size: 13 } }
+    }
+  }
+});
+
+// 5. Source pie
+new Chart(document.getElementById('chartSource'), {
+  type: 'doughnut',
+  data: {
+    labels: ['百度推广','电话','视频号','TikTok投流','百度自然搜索','邮件/WhatsApp','其他搜索','官网'],
+    datasets: [{
+      data: [55,16,11,25,9,13,7,5],
+      backgroundColor: ['#0f3460','#2e86c1','#3498db','#e74c3c','#5dade2','#f39c12','#95a5a6','#27ae60'],
+      borderWidth: 0
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: { position: 'right', labels: { font: { size: 11 }, padding: 8 } },
+      title: { display: true, text: '询盘来源渠道分布', font: { size: 13 } }
+    }
+  }
+});
+
+// 6. Region
+new Chart(document.getElementById('chartRegion'), {
+  type: 'bar',
+  data: {
+    labels: ['广东','浙江','江苏','孟加拉','巴基斯坦','上海','北京','山东','南非','其他'],
+    datasets: [{
+      label: '询盘数',
+      data: [42,19,15,14,13,11,5,4,3,25],
+      backgroundColor: ['#0f3460','#0f3460','#0f3460','#e74c3c','#e74c3c','#0f3460','#0f3460','#0f3460','#e74c3c','#95a5a6'],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: { display: false },
+      title: { display: true, text: '客户地域分布（深蓝=国内，红色=海外）', font: { size: 13 } }
+    },
+    scales: { y: { title: { display: true, text: '条数' } } }
+  }
+});
+
+// 7. Time
+new Chart(document.getElementById('chartTime'), {
+  type: 'line',
+  data: {
+    labels: ['2025/5','2025/6','2025/7','2025/8','2025/9','2025/10','2025/11','2025/12','2026/1','2026/3','2026/4','2026/5','2026/6'],
+    datasets: [{
+      label: '月询盘量',
+      data: [2,3,2,19,20,7,8,14,3,5,23,17,36],
+      borderColor: '#0f3460',
+      backgroundColor: 'rgba(15,52,96,0.1)',
+      fill: true,
+      tension: 0.3,
+      pointRadius: 5,
+      pointBackgroundColor: '#0f3460'
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: { display: false },
+      title: { display: true, text: '月度询盘趋势（2025.5 – 2026.6）', font: { size: 13 } }
+    },
+    scales: {
+      y: { title: { display: true, text: '条数' }, beginAtZero: true },
+      x: { title: { display: true, text: '月份' } }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
