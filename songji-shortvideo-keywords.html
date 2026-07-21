@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>松记钮扣 短视频平台关键词布局手册（v1）</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#f7f8fa; --ink:#1f2329; --sub:#5a6573;
+    --line:#e5e8ec; --brand:#c8102e; --brand-soft:#fce8ec; --accent:#0b5cad;
+    --ok:#1a7f37; --warn:#b8860b;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.72;font-size:16px;}
+  .sidebar-toc{position:fixed;left:0;top:0;width:290px;height:100vh;overflow-y:auto;
+    background:var(--panel);border-right:1px solid var(--line);padding:24px 16px;}
+  .sidebar-toc h2{font-size:14px;color:var(--sub);margin:0 0 12px;letter-spacing:1px;}
+  .sidebar-toc a{display:block;color:var(--sub);text-decoration:none;font-size:13px;
+    padding:6px 10px;border-radius:6px;border-left:3px solid transparent;}
+  .sidebar-toc a:hover{background:#fff;color:var(--ink);}
+  .sidebar-toc a.active{background:#fff;color:var(--brand);border-left:3px solid var(--brand);font-weight:600;}
+  .sidebar-toc .sub{padding-left:24px;font-size:12px;}
+  .main-content{margin-left:290px;padding:0 48px 80px;max-width:1040px;}
+  header.doc-head{padding:46px 0 22px;border-bottom:2px solid var(--brand);margin-bottom:30px;}
+  header.doc-head h1{font-size:28px;margin:0 0 8px;}
+  header.doc-head .meta{color:var(--sub);font-size:13px;}
+  header.doc-head .tag{display:inline-block;background:var(--brand-soft);color:var(--brand);
+    padding:2px 10px;border-radius:20px;font-size:12px;margin-right:6px;margin-top:6px;}
+  section{margin-bottom:42px;scroll-margin-top:18px;}
+  section h2{font-size:22px;border-left:5px solid var(--brand);padding-left:12px;margin:6px 0 16px;}
+  section h3{font-size:17px;color:var(--accent);margin:22px 0 10px;}
+  p{margin:9px 0;}
+  table{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px;}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top;}
+  th{background:var(--panel);font-weight:600;}
+  tr:nth-child(even) td{background:#fcfcfd;}
+  code{background:var(--panel);padding:1px 6px;border-radius:4px;font-size:13px;color:#b3264a;}
+  .cn{color:var(--brand);font-weight:600;}
+  .en{color:var(--accent);font-weight:600;}
+  .callout{border:1px solid var(--line);border-left:4px solid var(--accent);background:#f4f9ff;
+    padding:13px 17px;border-radius:8px;margin:14px 0;}
+  .callout.brand{border-left-color:var(--brand);background:var(--brand-soft);}
+  .callout.ok{border-left-color:var(--ok);background:#eefaf0;}
+  .callout.warn{border-left-color:var(--warn);background:#fdf6e3;}
+  .callout b{color:var(--ink);}
+  .tagset{border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:12px 0;background:#fcfcfd;}
+  .tagset .t{font-weight:600;color:var(--ink);margin-bottom:6px;}
+  .pill{display:inline-block;background:#eef1f5;color:var(--sub);border-radius:6px;
+    padding:3px 9px;font-size:13px;margin:3px 4px 3px 0;}
+  .pill.cn{background:var(--brand-soft);color:var(--brand);}
+  .pill.en{background:#e8f1fb;color:var(--accent);}
+  .src{font-size:12.5px;color:var(--sub);}
+  .src a{color:var(--accent);word-break:break-all;}
+  footer.doc-foot{border-top:1px solid var(--line);padding-top:18px;color:var(--sub);font-size:13px;}
+  .toggle{display:none;}
+  @media (max-width:900px){
+    .sidebar-toc{display:none;}
+    .main-content{margin-left:0;padding:0 16px 60px;}
+    .toggle{display:block;position:fixed;top:12px;right:12px;z-index:20;
+      background:var(--brand);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:13px;}
+    header.doc-head{padding-top:60px;}
+  }
+</style>
+</head>
+<body>
+<button class="toggle" onclick="document.querySelector('.sidebar-toc').style.display='block'">目录</button>
+<nav class="sidebar-toc">
+  <h2>目录</h2>
+  <a href="#s0">0. 为什么这么布局</a>
+  <a href="#s1">1. 三平台特性与打法</a>
+  <a href="#s2">2. 关键词分层总览</a>
+  <a href="#s3">3. 中文词库（视频号）</a>
+  <a class="sub" href="#s3-a">3.1 品牌信任/资质</a>
+  <a class="sub" href="#s3-b">3.2 产品品类</a>
+  <a class="sub" href="#s3-c">3.3 童车辅料（强势）</a>
+  <a class="sub" href="#s3-d">3.4 工艺品质</a>
+  <a class="sub" href="#s3-e">3.5 场景/客户</a>
+  <a class="sub" href="#s3-f">3.6 竞品替代/对标</a>
+  <a href="#s4">4. 英文词库（TikTok/FB）</a>
+  <a class="sub" href="#s4-a">4.1 品牌信任</a>
+  <a class="sub" href="#s4-b">4.2 产品品类</a>
+  <a class="sub" href="#s4-c">4.3 童车辅料</a>
+  <a class="sub" href="#s4-d">4.4 工艺品质</a>
+  <a class="sub" href="#s4-e">4.5 场景/客户</a>
+  <a class="sub" href="#s4-f">4.6 竞品替代</a>
+  <a href="#s5">5. 即用 5 标签模板</a>
+  <a href="#s6">6. 标题/封面/简介布局公式</a>
+  <a href="#s7">7. 童车辅料专题</a>
+  <a href="#s8">8. 竞品替代专题</a>
+  <a href="#s9">9. 数据真实性备注</a>
+</nav>
+
+<div class="main-content">
+<header class="doc-head">
+  <div>
+    <span class="tag">短视频 SEO</span><span class="tag">视频号·TikTok·Facebook</span>
+    <span class="tag">金属钮扣</span><span class="tag">品牌客户导向</span>
+  </div>
+  <h1>松记钮扣 短视频平台关键词布局手册</h1>
+  <div class="meta">编制：王小二 · 版本 v1 · 2026-07-21 · 基于松记官网 + 竞品官网 + 平台运营方法论实时检索整理</div>
+</header>
+
+<section id="s0">
+  <h2>0. 为什么这么布局（先对齐资产）</h2>
+  <div class="callout brand">
+    <b>关键发现：松记不是「小厂」，是高端品牌级供应商。</b>联网核实官网（sjbutton.com / sjbuttons.com）确认：
+    <ul style="margin:6px 0;">
+      <li>自称「中国高端金属钮扣领导者」，业内「<b>爪钮之王</b>」美誉</li>
+      <li>服务欧美一线品牌超 10 年：<b>GAP、沃尔玛、LEE、Carter's</b>（72 次国际验厂合规）</li>
+      <li>定制案例含 <b>NUNA 童车、宝马儿童安全座椅</b>钮扣 —— 印证童车辅料是强势类目</li>
+      <li>资质：<b>OEKO-TEX Standard 100 一级</b>、ISO9001:2015、高新技术企业、<b>100+ 国家专利</b></li>
+      <li>英文站定位「<b>Prym/LEE Partner</b>」——Prym 是德国高端辅料品牌，可直接做信任词</li>
+      <li>产品：五爪钮、工字扣、四合扣、撞钉、喼钮、手啪钮、铜夹钮、鞋帽/箱包/童车配件</li>
+    </ul>
+  </div>
+  <div class="callout">
+    <b>策略推论：</b>你的目标客户是「追求稳定品质的品牌客户」，对标 YKK、伟星去抢他们的客户。所以关键词<b>不碰「低价/便宜/批发」</b>，全部围绕：<b>① 品牌级信任背书 ② 品质稳定/可追溯 ③ 童车辅料强势 ④ YKK/伟星可靠替代</b>。短视频平台搜索流量来自「客户主动搜词」，把下列词埋进标题/标签/封面/简介/内页，才能被搜到。
+  </div>
+</section>
+
+<section id="s1">
+  <h2>1. 三平台特性与打法</h2>
+  <table>
+    <tr><th>平台</th><th>语言</th><th>用户搜词习惯</th><th>内容/标签打法</th><th>松记侧重</th></tr>
+    <tr><td>视频号</td><td>中文</td><td>「金属钮扣厂家」「童车配件」「钮扣定制」类短词+行业词</td><td>简介埋地域+行业+优势+联系方式；菜单栏设产品/案例/联系；标签用中文行业词（来源：莱航/91运营 SOP）</td><td>国内品牌服装厂、箱包厂、童车厂</td></tr>
+    <tr><td>TikTok</td><td>英文</td><td>"metal buttons manufacturer" "snap buttons" "baby stroller parts"</td><td>英文 hashtag + 标题含 manufacturer/supplier；工厂实拍流量大（来源：喜运达案例 单条300万播放700+询盘）</td><td>海外服装/婴童品牌、采购商</td></tr>
+    <tr><td>Facebook</td><td>英文</td><td>同 TikTok，且群组/主页搜索强</td><td>主页简介+帖子 hashtag；可进行业采购群组发专业内容</td><td>海外 B2B 采购、品牌指定代工厂</td></tr>
+  </table>
+  <div class="callout ok">
+    <b>通用打法（来源：91运营 30天SOP / 菜鸟科技）：</b>① 关键词调研别拍脑袋，客户搜的是「金属钮扣厂家」不是「今天车间真忙」；② 视频配比 7 流量型（工厂实力）:2 转化型（引导询盘）:1 人设型（老板/总工）；③ 每条视频结尾放钩子（「私信免费拿样品」「评论区扣1发报价」）；④ 多平台同步，视频号常能补爆。
+  </div>
+</section>
+
+<section id="s2">
+  <h2>2. 关键词分层总览</h2>
+  <p>按「客户搜索意图」分 6 层，每层都给中文（视频号）+ 英文（TikTok/FB）双栏。详细词库见第 3、4 节。</p>
+  <table>
+    <tr><th>层级</th><th>意图</th><th>视频号（中文）</th><th>TikTok/FB（英文）</th></tr>
+    <tr><td>A 品牌信任</td><td>找靠谱大厂</td><td>高端金属钮扣、爪钮之王、验厂合规</td><td>premium metal buttons, audited factory</td></tr>
+    <tr><td>B 产品品类</td><td>找具体产品</td><td>五爪钮、工字扣、撞钉、四合扣</td><td>snap buttons, rivets, jeans buttons</td></tr>
+    <tr><td>C 童车辅料</td><td>找童车/婴童配件</td><td>童车辅料、婴儿车配件、童车安全扣</td><td>baby stroller parts, pram snaps</td></tr>
+    <tr><td>D 工艺品质</td><td>验证品质稳定</td><td>大货一致性、盐雾测试、环保无镍</td><td>nickel free, OEKO-TEX, consistent quality</td></tr>
+    <tr><td>E 场景客户</td><td>找行业方案</td><td>服装厂辅料、箱包五金、婴童装品牌</td><td>garment factory, baby clothing brand</td></tr>
+    <tr><td>F 竞品替代</td><td>找 YKK/伟星替代</td><td>YKK替代、高端钮扣定制、不卷低价</td><td>YKK alternative, premium alternative</td></tr>
+  </table>
+</section>
+
+<section id="s3">
+  <h2>3. 中文词库（视频号）</h2>
+
+  <h3 id="s3-a">3.1 A 品牌信任 / 资质类 <span class="pill">抢品牌客户核心</span></h3>
+  <p>
+    <span class="pill cn">高端金属钮扣</span><span class="pill cn">中国高端金属钮扣领导者</span><span class="pill cn">爪钮之王</span>
+    <span class="pill cn">金属钮扣源头工厂</span><span class="pill cn">服装辅料源头工厂</span><span class="pill cn">欧美品牌指定供应商</span>
+    <span class="pill cn">国际验厂合规</span><span class="pill cn">可追溯生产</span><span class="pill cn">OEKO-TEX认证</span>
+    <span class="pill cn">ISO9001认证</span><span class="pill cn">高新技术企业</span><span class="pill cn">100项专利钮扣</span>
+    <span class="pill cn">品牌钮扣定制</span><span class="pill cn">Prym合作钮扣厂</span><span class="pill cn">GAP供应商</span>
+    <span class="pill cn">沃尔玛钮扣供应商</span><span class="pill cn">服装辅料实力工厂</span><span class="pill cn">深圳钮扣厂</span>
+  </p>
+
+  <h3 id="s3-b">3.2 B 产品品类类</h3>
+  <p>
+    <span class="pill cn">金属钮扣</span><span class="pill cn">五爪钮</span><span class="pill cn">工字扣</span>
+    <span class="pill cn">四合扣</span><span class="pill cn">撞钉</span><span class="pill cn">喼钮</span>
+    <span class="pill cn">手啪钮</span><span class="pill cn">铜夹钮</span><span class="pill cn">牛仔钮</span>
+    <span class="pill cn">按扣</span><span class="pill cn">金属扣</span><span class="pill cn">服装五金</span>
+    <span class="pill cn">箱包配件</span><span class="pill cn">鞋帽配件</span><span class="pill cn">金属纽扣</span>
+  </p>
+
+  <h3 id="s3-c">3.3 C 童车辅料类 <span class="pill">松记最强类目</span></h3>
+  <p>
+    <span class="pill cn">童车辅料</span><span class="pill cn">童车钮扣</span><span class="pill cn">婴儿车配件</span>
+    <span class="pill cn">婴儿推车扣具</span><span class="pill cn">童车安全扣</span><span class="pill cn">婴童装钮扣</span>
+    <span class="pill cn">儿童安全座椅钮扣</span><span class="pill cn">宝宝车五金</span><span class="pill cn">婴儿车按钮</span>
+    <span class="pill cn">童车五金配件</span><span class="pill cn">爬爬装钮扣</span><span class="pill cn">婴童服饰辅料</span>
+  </p>
+
+  <h3 id="s3-d">3.4 D 工艺品质类 <span class="pill">不卷低价的话术支撑</span></h3>
+  <p>
+    <span class="pill cn">钮扣品控</span><span class="pill cn">大货一致性</span><span class="pill cn">标准化流程</span>
+    <span class="pill cn">盐雾测试</span><span class="pill cn">拉力测试</span><span class="pill cn">环保无镍</span>
+    <span class="pill cn">重金属检测</span><span class="pill cn">耐水洗</span><span class="pill cn">色牢度</span>
+    <span class="pill cn">批次可追溯</span><span class="pill cn">高标品控</span><span class="pill cn">稳定品质</span>
+  </p>
+
+  <h3 id="s3-e">3.5 E 场景 / 客户类</h3>
+  <p>
+    <span class="pill cn">服装厂辅料</span><span class="pill cn">服装辅料供应商</span><span class="pill cn">箱包五金</span>
+    <span class="pill cn">鞋帽五金</span><span class="pill cn">工作服钮扣</span><span class="pill cn">牛仔裤扣</span>
+    <span class="pill cn">高端女装钮扣</span><span class="pill cn">婴童装品牌</span><span class="pill cn">校服钮扣</span>
+    <span class="pill cn">服装品牌供应商</span><span class="pill cn">源头工厂直供</span>
+  </p>
+
+  <h3 id="s3-f">3.6 F 竞品替代 / 对标类</h3>
+  <p>
+    <span class="pill cn">YKK替代</span><span class="pill cn">伟星钮扣</span><span class="pill cn">高端钮扣定制</span>
+    <span class="pill cn">进口钮扣替代</span><span class="pill cn">品牌钮扣供应商</span><span class="pill cn">不卷低价</span>
+    <span class="pill cn">品质稳定供应商</span><span class="pill cn">可靠钮扣厂</span><span class="pill cn">大牌同厂</span>
+  </p>
+</section>
+
+<section id="s4">
+  <h2>4. 英文词库（TikTok / Facebook）</h2>
+
+  <h3 id="s4-a">4.1 A 品牌信任 / 资质类</h3>
+  <p>
+    <span class="pill en">premium metal buttons</span><span class="pill en">high-end garment hardware</span><span class="pill en">branded buttons manufacturer</span>
+    <span class="pill en">certified metal buttons</span><span class="pill en">OEKO-TEX buttons</span><span class="pill en">ISO certified button factory</span>
+    <span class="pill en">trusted button supplier</span><span class="pill en">audited factory</span><span class="pill en">traceable production</span>
+    <span class="pill en">Prym partner</span><span class="pill en">LEE partner buttons</span><span class="pill en">global brand supplier</span>
+    <span class="pill en">China button factory</span><span class="pill en">metal button expert</span>
+  </p>
+
+  <h3 id="s4-b">4.2 B 产品品类类</h3>
+  <p>
+    <span class="pill en">metal buttons</span><span class="pill en">snap buttons</span><span class="pill en">press studs</span>
+    <span class="pill en">rivets</span><span class="pill en">eyelets</span><span class="pill en">jeans buttons</span>
+    <span class="pill en">snap fasteners</span><span class="pill en">prong snaps</span><span class="pill en">ring snaps</span>
+    <span class="pill en">sew-on snaps</span><span class="pill en">trouser buttons</span><span class="pill en">shirt buttons</span>
+    <span class="pill en">garment hardware</span><span class="pill en">bag hardware</span>
+  </p>
+
+  <h3 id="s4-c">4.3 C 童车辅料类 <span class="pill">hero category</span></h3>
+  <p>
+    <span class="pill en">baby stroller accessories</span><span class="pill en">stroller buttons</span><span class="pill en">pram snaps</span>
+    <span class="pill en">pushchair hardware</span><span class="pill en">baby carriage fittings</span><span class="pill en">infant wear snaps</span>
+    <span class="pill en">child car seat buttons</span><span class="pill en">baby stroller parts</span><span class="pill en">baby clothing snaps</span>
+    <span class="pill en">stroller buckles</span><span class="pill en">pram hardware</span>
+  </p>
+
+  <h3 id="s4-d">4.4 D 工艺品质类</h3>
+  <p>
+    <span class="pill en">button quality control</span><span class="pill en">consistent batch</span><span class="pill en">salt spray test</span>
+    <span class="pill en">pull test</span><span class="pill en">nickel free</span><span class="pill en">ROHS compliant</span>
+    <span class="pill en">color fastness</span><span class="pill en">eco-friendly buttons</span><span class="pill en">stable quality</span>
+    <span class="pill en">reliable manufacturer</span>
+  </p>
+
+  <h3 id="s4-e">4.5 E 场景 / 客户类</h3>
+  <p>
+    <span class="pill en">garment factory supplier</span><span class="pill en">bag hardware supplier</span><span class="pill en">shoe accessories</span>
+    <span class="pill en">jeans manufacturer</span><span class="pill en">apparel brand buttons</span><span class="pill en">baby clothing brand</span>
+    <span class="pill en">uniform buttons</span><span class="pill en">fashion brand hardware</span><span class="pill en">OEM for brands</span>
+  </p>
+
+  <h3 id="s4-f">4.6 F 竞品替代 / 对标类</h3>
+  <p>
+    <span class="pill en">YKK alternative</span><span class="pill en">premium button alternative</span><span class="pill en">branded snap buttons</span>
+    <span class="pill en">reliable button supplier</span><span class="pill en">quality over price</span><span class="pill en">trusted alternative</span>
+    <span class="pill en">high-end button factory</span>
+  </p>
+</section>
+
+<section id="s5">
+  <h2>5. 即用 5 标签模板（每条视频选一组）</h2>
+  <p>你说每条视频加 5 个标签。下面按视频主题给现成组合，直接抄：</p>
+
+  <div class="tagset"><div class="t">① 工厂实力 / 验厂合规 视频</div>
+    <span class="pill cn">#高端金属钮扣</span><span class="pill cn">#服装辅料源头工厂</span><span class="pill cn">#欧美品牌供应商</span><span class="pill cn">#国际验厂合规</span><span class="pill cn">#爪钮之王</span>
+  </div>
+  <div class="tagset"><div class="t">② 童车辅料 视频（重点推）</div>
+    <span class="pill cn">#童车辅料</span><span class="pill cn">#婴儿车配件</span><span class="pill cn">#婴童装钮扣</span><span class="pill cn">#童车安全扣</span><span class="pill cn">#金属钮扣厂家</span>
+  </div>
+  <div class="tagset"><div class="t">③ 工艺 / 品质 视频</div>
+    <span class="pill cn">#钮扣品控</span><span class="pill cn">#盐雾测试</span><span class="pill cn">#大货一致性</span><span class="pill cn">#OEKO-TEX认证</span><span class="pill cn">#环保无镍</span>
+  </div>
+  <div class="tagset"><div class="t">④ 定制 / 品牌服务 视频</div>
+    <span class="pill cn">#钮扣定制</span><span class="pill cn">#LOGO钮扣</span><span class="pill cn">#OEM钮扣</span><span class="pill cn">#品牌钮扣</span><span class="pill cn">#高端定制</span>
+  </div>
+  <div class="tagset"><div class="t">⑤ 竞品替代 / 抢 YKK 伟星客户 视频</div>
+    <span class="pill cn">#YKK替代</span><span class="pill cn">#高端钮扣</span><span class="pill cn">#品牌供应商</span><span class="pill cn">#不卷低价</span><span class="pill cn">#金属钮扣领导者</span>
+  </div>
+
+  <h3>TikTok / Facebook 5 hashtag 模板</h3>
+  <div class="tagset"><div class="t">① Factory / audit</div>
+    <span class="pill en">#metalbuttons</span><span class="pill en">#garmenthardware</span><span class="pill en">#premiumbuttons</span><span class="pill en">#auditedfactory</span><span class="pill en">#snapbuttons</span>
+  </div>
+  <div class="tagset"><div class="t">② Stroller / baby（重点推）</div>
+    <span class="pill en">#babyaccessories</span><span class="pill en">#strollerparts</span><span class="pill en">#babyclothing</span><span class="pill en">#infantwear</span><span class="pill en">#metalbuttons</span>
+  </div>
+  <div class="tagset"><div class="t">③ Quality</div>
+    <span class="pill en">#buttonqc</span><span class="pill en">#nickelfree</span><span class="pill en">#OEKOTEX</span><span class="pill en">#consistentquality</span><span class="pill en">#saltspraytest</span>
+  </div>
+  <div class="tagset"><div class="t">④ Custom / brand</div>
+    <span class="pill en">#custombuttons</span><span class="pill en">#logobuttons</span><span class="pill en">#OEMbuttons</span><span class="pill en">#brandedbuttons</span><span class="pill en">#metalbuttons</span>
+  </div>
+  <div class="tagset"><div class="t">⑤ Alternative（抢 YKK 客户）</div>
+    <span class="pill en">#YKKalternative</span><span class="pill en">#premiumalternative</span><span class="pill en">#reliablesupplier</span><span class="pill en">#brandbuttons</span><span class="pill en">#metalbuttons</span>
+  </div>
+</section>
+
+<section id="s6">
+  <h2>6. 标题 / 封面 / 简介 关键词布局公式</h2>
+  <div class="callout">
+    <b>标题：</b>把「核心品类词 + 信任词 + 场景词」塞进前 15 字（平台截取权重高）。
+    <br>· 视频号例：<code>高端金属钮扣源头工厂｜童车辅料为什么选松记？</code>
+    <br>· TikTok例：<code>Premium Metal Buttons Factory | Trusted by Global Brands</code>
+  </div>
+  <div class="callout">
+    <b>封面：</b>大字放「搜索词」而非 slogan。例：封面写「童车辅料·爪钮之王」比写「松记钮扣」更易被搜到；英文封面写「Baby Stroller Buttons」「Metal Snap Buttons」。
+  </div>
+  <div class="callout">
+    <b>简介 / 内页描述：</b>自然埋 3–5 个词（不要堆砌），带钩子与联系方式。
+    <br>· 视频号例：<code>松记钮扣｜中国高端金属钮扣领导者，服务 GAP/沃尔玛/LEE 等欧美品牌。童车辅料·五爪钮·工字扣源头工厂，OEKO-TEX 认证、批次可追溯。私信免费拿样品。</code>
+    <br>· TikTok例：<code>Songji Metal Buttons — Prym/LEE partner. Premium snap buttons & baby stroller hardware. OEKO-TEX certified, audited factory. DM for free samples.</code>
+  </div>
+  <div class="callout warn">
+    <b>避坑：</b>短视频 SEO 关键词要「客户会搜的词」，不是你内部叫法。别写「今天车间真忙」这类自嗨词（来源：91运营 SOP）。竞品替代视频可正面提 YKK/伟星（借其搜索量），但话术走「可靠替代/品质稳定」，不贬低、不卷价。
+  </div>
+</section>
+
+<section id="s7">
+  <h2>7. 童车辅料专题（松记强势，单列打）</h2>
+  <p>这是松记最大客户类目，也是差异化最强的赛道，建议单独开内容线 + 单独关键词组：</p>
+  <table>
+    <tr><th>位置</th><th>视频号（中文）</th><th>TikTok/FB（英文）</th></tr>
+    <tr><td>标题词</td><td>童车辅料、婴儿车配件、童车安全扣、宝宝车五金</td><td>baby stroller accessories, pram snaps, stroller buckles</td></tr>
+    <tr><td>信任词</td><td>NUNA童车钮扣、宝马儿童座椅钮扣、婴童装品牌供应商</td><td>NUNA stroller buttons, child car seat buttons, baby brand supplier</td></tr>
+    <tr><td>品质词</td><td>童车配件盐雾测试、婴童安全标准、环保无镍</td><td>baby safe hardware, nickel free, safety tested</td></tr>
+  </table>
+  <div class="callout ok">
+    <b>内容角度：</b>童车/婴童对「安全、无镍、耐咬、盐雾」要求极高，正好发挥松记的 OEKO-TEX + 盐雾测试 + 可追溯优势。用「为什么童车品牌不敢随便换钮扣厂」「一颗钮扣如何通过盐雾测试」这类痛点/品控视频，精准吸童车品牌采购。
+  </div>
+</section>
+
+<section id="s8">
+  <h2>8. 竞品替代专题（抢 YKK / 伟星 客户）</h2>
+  <p>目标：让搜 YKK/伟星 的品牌采购，也看到松记作为「同等品质、更灵活/可追溯」的替代选项。</p>
+  <table>
+    <tr><th>平台</th><th>可借力的搜索词</th><th>话术定位</th></tr>
+    <tr><td>视频号</td><td>YKK替代、伟星钮扣、高端钮扣定制、进口钮扣替代</td><td>「同样服务欧美一线品牌，流程标准化、批次可追溯，品质稳定不卷低价」</td></tr>
+    <tr><td>TikTok/FB</td><td>YKK alternative、premium button alternative、branded snap buttons</td><td>"Same quality, audited factory, traceable batches, reliable alternative to big brands"</td></tr>
+  </table>
+  <div class="callout brand">
+    <b>信任杠杆：</b>松记已服务 GAP/沃尔玛/LEE/Carter's + Prym 合作身份，本身就是「大牌同级别供应商」的证据。竞品替代视频不要攻击对手，而是展示「我们凭什么能接住大牌的订单」——验厂合规、150+流程标准、可追溯。
+  </div>
+</section>
+
+<section id="s9">
+  <h2>9. 数据真实性备注</h2>
+  <div class="callout warn">
+    <ul style="margin:6px 0;">
+      <li><b>🟢 已验证（松记自身官网）：</b>「爪钮之王」、服务 GAP/沃尔玛/LEE/Carter's、NUNA 童车 & 宝马儿童座椅定制案例、OEKO-TEX Standard 100 一级、ISO9001:2015、100+ 专利、Prym/LEE Partner 定位——均来自 sjbutton.com / sjbuttons.com（2026-07-21 检索）。</li>
+      <li><b>🟢 已验证（竞品官网）：</b>YKK（威可楷 ykk.cn）、伟星股份（weixing.cn，钮扣+拉链龙头、SAB 品牌、服务波司登/太平鸟/迪卡侬）——来自其官方站/年报。</li>
+      <li><b>🟡 合理推断 / 来源引用：</b>平台打法（视频号简介埋词、7:2:1 配比、钩子设计、TikTok 工厂号获客案例）来自莱航/91运营/菜鸟科技/喜运达等运营方法论文章，非平台官方数据，建议实测微调。</li>
+      <li><b>🔴 待你确认：</b>松记最新月度产能/专利数/具体验厂品牌清单如有更新，以你提供为准；标签词组合上线后需用各平台搜索框验证「能否搜到」，按实际曝光迭代。</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="doc-foot">
+  <p>本手册为关键词布局工具，非最终文案。下一步建议：① 按第 5 节 5 标签模板给近期视频打标；② 我用第 6 节公式帮你写 3–5 条视频标题+简介+标签的完整样例；③ 童车辅料线可单独排内容日历。</p>
+  <p>生成方式：anysearch 实时检索（松记官网+竞品官网+平台方法论）· 王小二 · 2026-07-21</p>
+</footer>
+</div>
+
+<script>
+(function(){
+  var links=document.querySelectorAll('.sidebar-toc a');
+  var sections=Array.prototype.map.call(links,function(a){return document.querySelector(a.getAttribute('href'));});
+  function spy(){
+    var pos=window.scrollY+120, idx=0;
+    sections.forEach(function(s,i){ if(s && s.offsetTop<=pos) idx=i; });
+    links.forEach(function(l,i){ l.classList.toggle('active', i===idx); });
+  }
+  window.addEventListener('scroll',spy); spy();
+})();
+</script>
+</body>
+</html>
